@@ -12,11 +12,11 @@ Elle connecte des clients ayant un besoin urgent (panne de voiture, fuite d'eau,
 
 ## 🛠 Stack Technique
 - **Framework :** React Native (via Expo)
-- **Langage :** TypeScript / JavaScript
+- **Langage :** TypeScript 
 - **Gestionnaire de paquets :** pnpm
 - **Navigation :** React Navigation (Stack & Tabs)
 - **Cartographie :** React Native Maps
-- **Backend (à venir) :** Firebase / Supabase
+- **Backend (à venir) :** Supabase
 
 ## 🚀 Installation
 
