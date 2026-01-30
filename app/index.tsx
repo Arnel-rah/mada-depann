@@ -1,3 +1,5 @@
+import HomeScreen from "@/src/screens/HomeScreen";
+import ProfileScreen from "@/src/screens/ProfileScreen";
 import { Text, View } from "react-native";
 
 export default function Index() {
@@ -9,7 +11,8 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+      <HomeScreen />
+      <ProfileScreen/>
     </View>
   );
 }
