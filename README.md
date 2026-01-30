@@ -1,50 +1,25 @@
-# Welcome to your Expo app 👋
+# Mada-Depann 🇲🇬
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Mada-Depann (Vaha-Olana) est une application mobile cross-platform visant à simplifier la recherche de prestataires de services de confiance à Madagascar (Antananarivo et provinces).
 
-## Get started
+Elle connecte des clients ayant un besoin urgent (panne de voiture, fuite d'eau, besoin d'un coursier) avec les prestataires qualifiés les plus proches.
 
-1. Install dependencies
+## 📱 Fonctionnalités Principales
+- **Géolocalisation :** Trouver un prestataire dans un rayon de X km.
+- **Catégories Locales :** Mécanique auto/moto, Plomberie, Coiffure à domicile, Coursier.
+- **Mode Hors-ligne :** Optimisé pour les connexions instables (Data Saver).
+- **Profils Vérifiés :** Système de notation et d'avis.
 
+## 🛠 Stack Technique
+- **Framework :** React Native (via Expo)
+- **Langage :** TypeScript / JavaScript
+- **Gestionnaire de paquets :** pnpm
+- **Navigation :** React Navigation (Stack & Tabs)
+- **Cartographie :** React Native Maps
+- **Backend (à venir) :** Firebase / Supabase
+
+## 🚀 Installation
+
+1. Cloner le repo :
    ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+   git clone https://github.com/Arnel-rah/mada-depann.git
