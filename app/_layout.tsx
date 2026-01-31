@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Stack } from "expo-router";
+import { StatusBar } from 'expo-status-bar'; // 1. Importe la StatusBar d'Expo
 import SplashAnimated from "../src/components/SplashAnimated";
 
 export default function RootLayout() {
@@ -12,24 +13,29 @@ export default function RootLayout() {
       />
     );
   }
+
   return (
-    <Stack>
-      <Stack.Screen 
-        name="index" 
-        options={{ 
-          title: "Mada-Depann 🇲🇬",
-          headerTitleStyle: { fontWeight: 'bold' },
-          headerShown: false 
-        }} 
-      />
-      
-      <Stack.Screen 
-        name="profile" 
-        options={{ 
-          title: "Mon Compte",
-          presentation: 'modal'
-        }} 
-      />
-    </Stack>
+    <>
+      <StatusBar style="dark" /> 
+
+      <Stack>
+        <Stack.Screen 
+          name="index" 
+          options={{ 
+            title: "Mada-Depann 🇲🇬",
+            headerTitleStyle: { fontWeight: 'bold' },
+            headerShown: false 
+          }} 
+        />
+        
+        <Stack.Screen 
+          name="profile" 
+          options={{ 
+            title: "Mon Compte",
+            presentation: 'modal'
+          }} 
+        />
+      </Stack>
+    </>
   );
 }
