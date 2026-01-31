@@ -1,41 +1,10 @@
-import { useState } from 'react';
-import { Stack } from "expo-router";
-import { StatusBar } from 'expo-status-bar'; // 1. Importe la StatusBar d'Expo
-import SplashAnimated from "../src/components/SplashAnimated";
+import { Stack } from 'expo-router';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-export default function RootLayout() {
-  const [isAppReady, setIsAppReady] = useState(false);
-
-  if (!isAppReady) {
-    return (
-      <SplashAnimated 
-        onFinish={() => setIsAppReady(true)}
-      />
-    );
-  }
-
+export default function Layout() {
   return (
-    <>
-      <StatusBar style="dark" /> 
-
-      <Stack>
-        <Stack.Screen 
-          name="index" 
-          options={{ 
-            title: "Mada-Depann 🇲🇬",
-            headerTitleStyle: { fontWeight: 'bold' },
-            headerShown: false 
-          }} 
-        />
-        
-        <Stack.Screen 
-          name="profile" 
-          options={{ 
-            title: "Mon Compte",
-            presentation: 'modal'
-          }} 
-        />
-      </Stack>
-    </>
+    <SafeAreaProvider>
+      <Stack screenOptions={{ headerShown: false }} />
+    </SafeAreaProvider>
   );
 }
