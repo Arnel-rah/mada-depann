@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
-import { View, StyleSheet, Animated, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
+import { View, StyleSheet, Animated, ScrollView, TouchableOpacity, Dimensions, Platform } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
-import { COLORS } from '../theme/useTheme';
+import { Ionicons, Feather } from '@expo/vector-icons';
 import { ExpertCard } from '../components/ExpertCard';
 import { SkeletonCard } from '../components/Skeleton';
 import { useExperts } from '../hooks/useExperts';
@@ -10,31 +10,56 @@ import { ThemedText } from '../components/ThemedComponents';
 
 const { width } = Dimensions.get('window');
 
+const THEME = {
+  bg: '#000000',
+  surface: '#0A0A0A',
+  card: '#151515',
+  accent: '#00F0FF',
+  secondary: '#7000FF',
+  textMain: '#FFFFFF',
+  textDim: '#555555'
+};
+
 export default function Home() {
   const insets = useSafeAreaInsets();
   const { experts, loading } = useExperts();
   const scrollY = useRef(new Animated.Value(0)).current;
 
+  const handleSearch = () => console.log("Recherche lancée");
+  const handleNotifications = () => console.log("Notifications ouvertes");
+  const headerBgOpacity = scrollY.interpolate({
+    inputRange: [0, 60],
+    outputRange: [0, 0.98],
+    extrapolate: 'clamp',
+  });
+
   return (
     <View style={styles.mainWrapper}>
-      {/* 1. LOGO HEADER FIXE */}
-      <View style={[styles.fixedHeader, { paddingTop: insets.top + 10 }]}>
+      <StatusBar style="light" />
+      <Animated.View style={[
+        styles.fixedHeaderBackground, 
+        { height: 70 + insets.top, opacity: headerBgOpacity }
+      ]} />
+      
+      <View style={[styles.headerContentWrapper, { top: insets.top }]}>
         <View style={styles.headerContent}>
-          {/* LOGO COMPOSITION */}
-          <View style={styles.logoContainer}>
-            <View style={styles.logoIcon}>
-              <Ionicons name="flash" size={18} color="white" />
+          <View style={styles.logoGroup}>
+            <View style={styles.logoSquare}>
+              <Ionicons name="flash" size={16} color="black" />
             </View>
-            <ThemedText style={styles.logoText}>Fix<ThemedText style={{color: COLORS.primary}}>ly</ThemedText></ThemedText>
+            <ThemedText style={styles.logoText}>FIX<ThemedText style={{color: THEME.accent}}>LY</ThemedText></ThemedText>
           </View>
-
+          
           <View style={styles.headerActions}>
-            <TouchableOpacity style={styles.actionCircle}>
-              <Feather name="search" size={20} color={COLORS.dark} />
+            <TouchableOpacity onPress={handleSearch} activeOpacity={0.7} style={styles.glassIcon}>
+              <Feather name="search" size={20} color="white" />
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.actionCircle, { marginLeft: 12 }]}>
-              <View style={styles.notifDot} />
-              <Feather name="bell" size={20} color={COLORS.dark} />
+            
+            <TouchableOpacity onPress={handleNotifications} activeOpacity={0.7} style={[styles.glassIcon, {marginLeft: 12}]}>
+              <View style={styles.badgeContainer}>
+                <View style={styles.badge} />
+              </View>
+              <Feather name="bell" size={20} color="white" />
             </TouchableOpacity>
           </View>
         </View>
@@ -42,130 +67,149 @@ export default function Home() {
 
       <Animated.ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingTop: 100 + insets.top, paddingBottom: 120 }}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: false }
-        )}
+        onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: false })}
+        contentContainerStyle={{ paddingTop: 80 + insets.top, paddingBottom: 140 }}
+        scrollEventThrottle={16}
       >
         <View style={styles.padding}>
-          
-          {/* SECTION SERVICES (ICÔNES AMÉLIORÉES) */}
+          <View style={styles.heroSection}>
+            <ThemedText style={styles.heroSub}>BIENVENUE, ALEX</ThemedText>
+            <ThemedText style={styles.heroTitle}>Trouvez votre <ThemedText style={{color: THEME.accent}}>Expert</ThemedText></ThemedText>
+          </View>
           <View style={styles.section}>
-             <ThemedText style={styles.sectionTitle}>Services</ThemedText>
-             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.iconScroll}>
+             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.serviceScroll}>
                 {[
-                  { n: 'Plomberie', i: 'droplet', c: '#3B82F6' },
-                  { n: 'Élec', i: 'zap', c: '#F59E0B' },
-                  { n: 'Auto', i: 'tool', c: '#EF4444' },
-                  { n: 'Peinture', i: 'edit-3', c: '#10B981' }
+                  { n: 'Plomberie', i: 'droplet', active: true },
+                  { n: 'Électricité', i: 'zap', active: false },
+                  { n: 'Mécanique', i: 'settings', active: false },
+                  { n: 'Peinture', i: 'edit-3', active: false }
                 ].map((item, idx) => (
-                  <TouchableOpacity key={idx} style={styles.serviceItem}>
-                    <View style={[styles.serviceIcon, { backgroundColor: item.c + '15' }]}>
-                      <Feather name={item.i as any} size={22} color={item.c} />
-                    </View>
-                    <ThemedText style={styles.serviceLabel}>{item.n}</ThemedText>
+                  <TouchableOpacity key={idx} style={[styles.neoService, item.active && styles.activeNeoService]}>
+                    <Feather name={item.i as any} size={18} color={item.active ? 'black' : THEME.accent} />
+                    <ThemedText style={[styles.serviceText, { color: item.active ? 'black' : 'white' }]}>{item.n}</ThemedText>
                   </TouchableOpacity>
                 ))}
              </ScrollView>
           </View>
-
-          {/* BENTO PROMO GRID */}
-          <View style={styles.bentoGrid}>
-            <TouchableOpacity style={styles.bentoLarge}>
-              <ThemedText style={styles.bentoTag}>PROMO</ThemedText>
-              <ThemedText style={styles.bentoTitle}>-30% sur le premier dépannage</ThemedText>
-              <View style={styles.bentoBtn}><Feather name="arrow-right" size={18} color="white" /></View>
+          <View style={styles.bentoContainer}>
+            <TouchableOpacity activeOpacity={0.9} style={styles.bentoMain}>
+              <View>
+                <View style={styles.bentoBadge}>
+                  <ThemedText style={styles.bentoTag}>OFFRE LIMITÉE</ThemedText>
+                </View>
+                <ThemedText style={styles.bentoTitle}>
+                  -50% <ThemedText style={{fontSize: 16, fontWeight: '400', color: '#BBB'}}>sur le</ThemedText>{"\n"}
+                  Pack Sérénité
+                </ThemedText>
+              </View>
+              <View style={styles.bentoFooter}>
+                <ThemedText style={styles.bentoTimer}>Expire dans: 02h 45m</ThemedText>
+                <View style={styles.bentoCircle}>
+                  <Feather name="arrow-right" size={18} color={THEME.accent} />
+                </View>
+              </View>
             </TouchableOpacity>
-            <View style={styles.bentoColumn}>
-              <View style={[styles.bentoSmall, { backgroundColor: COLORS.dark }]}>
-                <Ionicons name="shield-checkmark" size={24} color="white" />
-              </View>
-              <View style={[styles.bentoSmall, { backgroundColor: '#F1F5F9' }]}>
-                <ThemedText style={styles.bentoSmallText}>TOP</ThemedText>
-              </View>
+            
+            <View style={styles.bentoSide}>
+               <View style={styles.sideBoxTop}>
+                  <Ionicons name="shield-checkmark" size={26} color={THEME.secondary} />
+                  <ThemedText style={styles.sideTextSmall}>GARANTI</ThemedText>
+               </View>
+               <View style={styles.sideBoxBottom}>
+                  <View style={styles.statsRow}>
+                    <ThemedText style={styles.sideText}>4.9</ThemedText>
+                    <Ionicons name="star" size={12} color={THEME.accent} />
+                  </View>
+                  <ThemedText style={styles.sideAvis}>12K AVIS</ThemedText>
+               </View>
             </View>
           </View>
-
-          {/* LISTE DES EXPERTS (LIMITÉE À 2) */}
           <View style={styles.section}>
             <View style={styles.rowBetween}>
-              <ThemedText style={styles.sectionTitle}>Recommandés</ThemedText>
-              <TouchableOpacity><ThemedText style={styles.link}>Voir tout</ThemedText></TouchableOpacity>
+              <View>
+                <ThemedText style={styles.titleMain}>Recommandés</ThemedText>
+                <View style={styles.underLine} />
+              </View>
+              <TouchableOpacity style={styles.seeAllBtn}>
+                <ThemedText style={styles.seeAllText}>VOIR TOUT</ThemedText>
+                <Feather name="chevron-right" size={16} color={THEME.accent} />
+              </TouchableOpacity>
             </View>
+
             {loading ? (
               [1, 2].map(i => <SkeletonCard key={i} />)
             ) : (
-              // On ne prend que les 2 premiers
-              experts.slice(0, 2).map(item => <ExpertCard key={item.id} expert={item} />)
+              experts.slice(0, 3).map(item => <ExpertCard key={item.id} expert={item} />)
             )}
           </View>
         </View>
       </Animated.ScrollView>
-
-      {/* NAVBAR FLOATING */}
-      <View style={[styles.navContainer, { bottom: insets.bottom + 20 }]}>
-        <TouchableOpacity style={styles.navItem}><Feather name="home" size={22} color={COLORS.primary} /></TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Feather name="calendar" size={22} color="#94A3B8" /></TouchableOpacity>
+      <View style={[styles.navBar, { bottom: insets.bottom + 15 }]}>
+        <TouchableOpacity style={styles.navItem}><Feather name="home" size={22} color={THEME.accent} /></TouchableOpacity>
+        <TouchableOpacity style={styles.navItem}><Feather name="layers" size={22} color={THEME.textDim} /></TouchableOpacity>
         <TouchableOpacity style={styles.navMainBtn}>
-           <Feather name="plus" size={28} color="white" />
+          <Feather name="plus" size={28} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Feather name="message-square" size={22} color="#94A3B8" /></TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Feather name="user" size={22} color="#94A3B8" /></TouchableOpacity>
+        <TouchableOpacity style={styles.navItem}><Feather name="message-square" size={22} color={THEME.textDim} /></TouchableOpacity>
+        <TouchableOpacity style={styles.navItem}><Feather name="user" size={22} color={THEME.textDim} /></TouchableOpacity>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  mainWrapper: { flex: 1, backgroundColor: '#FFFFFF' },
+  mainWrapper: { flex: 1, backgroundColor: THEME.bg },
   padding: { paddingHorizontal: 20 },
-  
-  // Header Logo
-  fixedHeader: {
-    position: 'absolute', top: 0, left: 0, right: 0,
-    backgroundColor: '#FFFFFF', zIndex: 1000, height: 100,
-    justifyContent: 'center',
-  },
-  headerContent: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20 },
-  logoContainer: { flexDirection: 'row', alignItems: 'center' },
-  logoIcon: { width: 32, height: 32, backgroundColor: COLORS.dark, borderRadius: 10, justifyContent: 'center', alignItems: 'center' },
-  logoText: { fontSize: 22, fontWeight: '900', color: COLORS.dark, marginLeft: 10, letterSpacing: -0.5 },
-  
+  fixedHeaderBackground: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1000, backgroundColor: THEME.bg },
+  headerContentWrapper: { position: 'absolute', left: 0, right: 0, zIndex: 1010 },
+  headerContent: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, height: 70 },
+  logoGroup: { flexDirection: 'row', alignItems: 'center' },
+  logoSquare: { width: 32, height: 32, backgroundColor: THEME.accent, borderRadius: 8, justifyContent: 'center', alignItems: 'center', transform: [{rotate: '45deg'}] },
+  logoText: { fontSize: 22, fontWeight: '900', color: 'white', marginLeft: 16, letterSpacing: -1 },
   headerActions: { flexDirection: 'row', alignItems: 'center' },
-  actionCircle: { width: 44, height: 44, borderRadius: 14, backgroundColor: '#F8FAFC', justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#F1F5F9' },
-  notifDot: { position: 'absolute', top: 12, right: 12, width: 8, height: 8, borderRadius: 4, backgroundColor: COLORS.primary, zIndex: 1, borderWidth: 1.5, borderColor: 'white' },
+  glassIcon: { width: 44, height: 44, borderRadius: 14, backgroundColor: 'rgba(255,255,255,0.08)', justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' },
+  badgeContainer: { position: 'absolute', top: 10, right: 10, zIndex: 2 },
+  badge: { width: 10, height: 10, borderRadius: 5, backgroundColor: THEME.secondary, borderWidth: 2, borderColor: THEME.bg },
 
-  // Services
-  section: { marginTop: 10 },
-  sectionTitle: { fontSize: 18, fontWeight: '800', color: COLORS.dark, marginBottom: 15 },
-  iconScroll: { marginHorizontal: -20, paddingLeft: 20 },
-  serviceItem: { alignItems: 'center', marginRight: 20 },
-  serviceIcon: { width: 60, height: 60, borderRadius: 20, justifyContent: 'center', alignItems: 'center', marginBottom: 8 },
-  serviceLabel: { fontSize: 12, fontWeight: '700', color: '#64748B' },
+  heroSection: { marginTop: 10, marginBottom: 20 },
+  heroSub: { color: THEME.textDim, fontSize: 11, fontWeight: '800', letterSpacing: 2 },
+  heroTitle: { color: 'white', fontSize: 32, fontWeight: '900', marginTop: 4 },
 
-  // Bento
-  bentoGrid: { flexDirection: 'row', height: 160, marginVertical: 25 },
-  bentoLarge: { flex: 2, backgroundColor: COLORS.primary, borderRadius: 28, padding: 20, justifyContent: 'space-between' },
-  bentoTag: { color: 'rgba(255,255,255,0.6)', fontWeight: '900', fontSize: 10, letterSpacing: 1 },
-  bentoTitle: { color: 'white', fontSize: 18, fontWeight: '800', width: '80%' },
-  bentoBtn: { width: 36, height: 36, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.2)', justifyContent: 'center', alignItems: 'center' },
-  bentoColumn: { flex: 0.8, marginLeft: 15, justifyContent: 'space-between' },
-  bentoSmall: { height: '47%', borderRadius: 22, justifyContent: 'center', alignItems: 'center' },
-  bentoSmallText: { fontWeight: '900', color: COLORS.dark, fontSize: 14 },
+  section: { marginVertical: 10 },
+  serviceScroll: { marginHorizontal: -20, paddingLeft: 20 },
+  neoService: { flexDirection: 'row', alignItems: 'center', backgroundColor: THEME.surface, paddingVertical: 12, paddingHorizontal: 20, borderRadius: 16, marginRight: 12, borderWidth: 1, borderColor: '#1A1A1A' },
+  activeNeoService: { backgroundColor: THEME.accent, borderColor: THEME.accent },
+  serviceText: { marginLeft: 10, fontWeight: '700', fontSize: 14 },
 
-  // List
-  rowBetween: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15 },
-  link: { color: COLORS.primary, fontWeight: '800', fontSize: 13 },
+  bentoContainer: { flexDirection: 'row', height: 195, marginVertical: 25 },
+  bentoMain: { flex: 2.2, backgroundColor: THEME.surface, borderRadius: 30, padding: 22, justifyContent: 'space-between', borderWidth: 1, borderColor: '#1A1A1A' },
+  bentoBadge: { backgroundColor: 'rgba(0, 240, 255, 0.1)', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start' },
+  bentoTag: { color: THEME.accent, fontSize: 9, fontWeight: '900', letterSpacing: 1 },
+  bentoTitle: { color: 'white', fontSize: 24, fontWeight: '900', lineHeight: 28, marginTop: 12 },
+  bentoFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  bentoTimer: { color: THEME.textDim, fontSize: 11, fontWeight: '600' },
+  bentoCircle: { width: 38, height: 38, borderRadius: 19, backgroundColor: '#111', justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#222' },
+  
+  bentoSide: { flex: 0.8, marginLeft: 12, justifyContent: 'space-between' },
+  sideBoxTop: { height: '47%', borderRadius: 25, backgroundColor: THEME.secondary + '15', justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: THEME.secondary + '30' },
+  sideBoxBottom: { height: '47%', borderRadius: 25, backgroundColor: THEME.card, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#222' },
+  sideText: { color: 'white', fontWeight: '900', fontSize: 20 },
+  sideTextSmall: { fontSize: 8, fontWeight: '900', color: THEME.secondary, marginTop: 4, letterSpacing: 0.5 },
+  statsRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  sideAvis: { color: THEME.textDim, fontSize: 9, fontWeight: '700' },
 
-  // Navbar
-  navContainer: {
-    position: 'absolute', alignSelf: 'center',
-    width: width * 0.9, height: 70,
-    backgroundColor: COLORS.dark, borderRadius: 24,
-    flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center',
-    paddingHorizontal: 10, elevation: 10
+  rowBetween: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 20 },
+  titleMain: { fontSize: 24, fontWeight: '900', color: 'white' },
+  underLine: { width: 35, height: 4, backgroundColor: THEME.accent, marginTop: 4, borderRadius: 2 },
+  seeAllBtn: { flexDirection: 'row', alignItems: 'center' },
+  seeAllText: { color: THEME.textDim, fontSize: 12, fontWeight: '900', marginRight: 4 },
+
+  navBar: {
+    position: 'absolute', alignSelf: 'center', width: width * 0.92, height: 75,
+    backgroundColor: 'rgba(10, 10, 10, 0.96)', borderRadius: 25, flexDirection: 'row',
+    justifyContent: 'space-around', alignItems: 'center', paddingHorizontal: 10,
+    borderWidth: 1, borderColor: 'rgba(255,255,255,0.05)'
   },
-  navItem: { width: 50, height: 50, justifyContent: 'center', alignItems: 'center' },
-  navMainBtn: { width: 50, height: 50, borderRadius: 16, backgroundColor: COLORS.primary, justifyContent: 'center', alignItems: 'center', elevation: 4 }
+  navItem: { padding: 12 },
+  navMainBtn: { width: 56, height: 56, borderRadius: 20, backgroundColor: THEME.accent, justifyContent: 'center', alignItems: 'center' }
 });
