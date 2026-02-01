@@ -11,13 +11,13 @@ import { ThemedText } from '../components/ThemedComponents';
 const { width } = Dimensions.get('window');
 
 const THEME = {
-  bg: '#000000',
-  surface: '#0A0A0A',
-  card: '#151515',
+  bg: '#0A0A0F',
+  surface: '#12121A',
+  card: '#1A1A25',
   accent: '#00F0FF',
-  secondary: '#7000FF',
-  textMain: '#FFFFFF',
-  textDim: '#555555'
+  secondary: '#7B00FF',
+  textMain: '#F8F9FA',
+  textDim: '#A0A0B0'
 };
 
 export default function Home() {
@@ -27,6 +27,7 @@ export default function Home() {
 
   const handleSearch = () => console.log("Recherche lancée");
   const handleNotifications = () => console.log("Notifications ouvertes");
+
   const headerBgOpacity = scrollY.interpolate({
     inputRange: [0, 60],
     outputRange: [0, 0.98],
@@ -76,21 +77,23 @@ export default function Home() {
             <ThemedText style={styles.heroSub}>BIENVENUE, ALEX</ThemedText>
             <ThemedText style={styles.heroTitle}>Trouvez votre <ThemedText style={{color: THEME.accent}}>Expert</ThemedText></ThemedText>
           </View>
+
           <View style={styles.section}>
-             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.serviceScroll}>
-                {[
-                  { n: 'Plomberie', i: 'droplet', active: true },
-                  { n: 'Électricité', i: 'zap', active: false },
-                  { n: 'Mécanique', i: 'settings', active: false },
-                  { n: 'Peinture', i: 'edit-3', active: false }
-                ].map((item, idx) => (
-                  <TouchableOpacity key={idx} style={[styles.neoService, item.active && styles.activeNeoService]}>
-                    <Feather name={item.i as any} size={18} color={item.active ? 'black' : THEME.accent} />
-                    <ThemedText style={[styles.serviceText, { color: item.active ? 'black' : 'white' }]}>{item.n}</ThemedText>
-                  </TouchableOpacity>
-                ))}
-             </ScrollView>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.serviceScroll}>
+              {[
+                { n: 'Plomberie', i: 'droplet', active: true },
+                { n: 'Électricité', i: 'zap', active: false },
+                { n: 'Mécanique', i: 'settings', active: false },
+                { n: 'Peinture', i: 'edit-3', active: false }
+              ].map((item, idx) => (
+                <TouchableOpacity key={idx} style={[styles.neoService, item.active && styles.activeNeoService]}>
+                  <Feather name={item.i as any} size={18} color={item.active ? 'black' : THEME.accent} />
+                  <ThemedText style={[styles.serviceText, { color: item.active ? 'black' : '#D4D4FF' }]}>{item.n}</ThemedText>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
           </View>
+
           <View style={styles.bentoContainer}>
             <TouchableOpacity activeOpacity={0.9} style={styles.bentoMain}>
               <View>
@@ -111,19 +114,20 @@ export default function Home() {
             </TouchableOpacity>
             
             <View style={styles.bentoSide}>
-               <View style={styles.sideBoxTop}>
-                  <Ionicons name="shield-checkmark" size={26} color={THEME.secondary} />
-                  <ThemedText style={styles.sideTextSmall}>GARANTI</ThemedText>
-               </View>
-               <View style={styles.sideBoxBottom}>
-                  <View style={styles.statsRow}>
-                    <ThemedText style={styles.sideText}>4.9</ThemedText>
-                    <Ionicons name="star" size={12} color={THEME.accent} />
-                  </View>
-                  <ThemedText style={styles.sideAvis}>12K AVIS</ThemedText>
-               </View>
+              <View style={styles.sideBoxTop}>
+                <Ionicons name="shield-checkmark" size={26} color={THEME.secondary} />
+                <ThemedText style={styles.sideTextSmall}>GARANTI</ThemedText>
+              </View>
+              <View style={styles.sideBoxBottom}>
+                <View style={styles.statsRow}>
+                  <ThemedText style={styles.sideText}>4.9</ThemedText>
+                  <Ionicons name="star" size={12} color={THEME.accent} />
+                </View>
+                <ThemedText style={styles.sideAvis}>12K AVIS</ThemedText>
+              </View>
             </View>
           </View>
+
           <View style={styles.section}>
             <View style={styles.rowBetween}>
               <View>
@@ -144,6 +148,7 @@ export default function Home() {
           </View>
         </View>
       </Animated.ScrollView>
+
       <View style={[styles.navBar, { bottom: insets.bottom + 15 }]}>
         <TouchableOpacity style={styles.navItem}><Feather name="home" size={22} color={THEME.accent} /></TouchableOpacity>
         <TouchableOpacity style={styles.navItem}><Feather name="layers" size={22} color={THEME.textDim} /></TouchableOpacity>
@@ -167,7 +172,7 @@ const styles = StyleSheet.create({
   logoSquare: { width: 32, height: 32, backgroundColor: THEME.accent, borderRadius: 8, justifyContent: 'center', alignItems: 'center', transform: [{rotate: '45deg'}] },
   logoText: { fontSize: 22, fontWeight: '900', color: 'white', marginLeft: 16, letterSpacing: -1 },
   headerActions: { flexDirection: 'row', alignItems: 'center' },
-  glassIcon: { width: 44, height: 44, borderRadius: 14, backgroundColor: 'rgba(255,255,255,0.08)', justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' },
+  glassIcon: { width: 44, height: 44, borderRadius: 14, backgroundColor: 'rgba(255,255,255,0.06)', justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: 'rgba(255,255,255,0.10)' },
   badgeContainer: { position: 'absolute', top: 10, right: 10, zIndex: 2 },
   badge: { width: 10, height: 10, borderRadius: 5, backgroundColor: THEME.secondary, borderWidth: 2, borderColor: THEME.bg },
 
