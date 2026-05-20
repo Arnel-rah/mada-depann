@@ -1,0 +1,126 @@
+
+# Dépendances
+node_modules/
+.pnpm-store/
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environnement
+.env
+.env.local
+.env.production
+.env.development
+.env.test
+*.env
+
+# Compilation TypeScript
+dist/
+build/
+*.tsbuildinfo
+temp/
+
+# Logs
+logs/
+*.log
+log.txt
+logs/
+
+# OS fichiers système
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.swp
+*.swo
+*~
+Desktop.ini
+
+# IDE et éditeurs
+.vscode/
+.idea/
+*.sublime-*
+.project
+.classpath
+.settings/
+*.iml
+
+# Backup fichiers
+*.bak
+*.backup
+*.old
+*.orig
+
+# Tests
+coverage/
+.nyc_output/
+*.lcov
+*.test
+*.spec
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Certificats SSL
+*.pem
+*.key
+*.crt
+*.cert
+
+# Production
+*.pid
+*.seed
+*.pid.lock
+
+# Redis
+dump.rdb
+
+# Supabase
+supabase/.temp/
+*.db
+
+# Fichiers temporaires
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Secrets
+.secrets
+*.secret
+key.pem
+private.key
+
+# Health check local
+healthcheck.dat
+
+# Configuration utilisateur
+.env.user
+*.user.json
+
+# Uploads
+uploads/
+files/
+public/uploads/
+storage/
+
+# Debug
+debug.log
+debug/
+inspector.log
+
+# PM2
+.pm2/
+
+# Nginx
+nginx.conf.bak
+
+# Patches
+*.patch
+*.diff
+EOF
